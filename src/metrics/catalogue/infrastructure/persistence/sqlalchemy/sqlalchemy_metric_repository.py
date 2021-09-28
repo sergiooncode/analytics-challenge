@@ -1,3 +1,5 @@
+from typing import List
+
 from sqlalchemy.exc import DatabaseError, IntegrityError
 
 from src.metrics.catalogue.domain.exception.same_name_metric_exists import (
@@ -10,6 +12,12 @@ from src.metrics.core.persistence.models.metric import Metric
 
 
 class SqlalchemyMetricRepository(MetricRepository):
+    def list(self, name: str = None) -> List[Metric]:
+        q = session.query(Metric)
+        if name:
+            q = q.filter_by(name=name)
+        return q.all()
+
     def save(self, metric: MetricModel, parent_metric_id: int) -> None:
         try:
             metric_object = Metric(name=metric.name, level=metric.level)

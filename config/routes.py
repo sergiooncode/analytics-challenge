@@ -14,5 +14,10 @@ metrics_catalogue_api_view = MetricsCatalogueController.as_view(
 metrics_api.add_url_rule(
     f"{METRICS_CATALOGUE}",
     view_func=metrics_catalogue_api_view,
-    methods=["POST"],
+    methods=["GET", "POST"],
+)
+metrics_api.add_url_rule(
+    f"{METRICS_CATALOGUE}/<string:metric_name>",
+    view_func=metrics_catalogue_api_view,
+    methods=["GET"],
 )
