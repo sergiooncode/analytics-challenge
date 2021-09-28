@@ -111,5 +111,8 @@ def test_when_are_recorded_and_metric_doesnt_exist(client, session):
     metric_records_recorded = session.query(MetricRecord).all()
 
     assert 422 == resp.status_code
-    assert b"" == resp.data
+    assert (
+        b'{"message": "Metric with name metric_one to record doesn\'t exist"}'
+        == resp.data
+    )
     assert 0 == len(metric_records_recorded)
