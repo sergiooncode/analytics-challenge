@@ -1,11 +1,15 @@
 import traceback
+from typing import List, Dict, Union
 
-from flask import Response
-from flask import request
 from flask.views import MethodView
+from flask import jsonify, make_response, request
+from flask import Response
 
 from src.metrics.records.application.record_metric_record_use_case import (
     RecordMetricRecordsUseCase,
+)
+from src.metrics.records.application.retrieve_metric_records_use_case import (
+    RetrieveMetricRecordsUseCase,
 )
 from src.metrics.records.domain.metric_record_repository import MetricRecordRepository
 from src.metrics.records.domain.model.metric_record import MetricRecord
@@ -19,9 +23,24 @@ class MetricRecordsController(MethodView):
         metric_records_repository: MetricRecordRepository = (
             SqlalchemyMetricRecordRepository()
         )
+        self.__retrieve_metric_records_service = RetrieveMetricRecordsUseCase(
+            metric_records_repository=metric_records_repository
+        )
         self.__record_metric_record_service = RecordMetricRecordsUseCase(
             metric_records_repository=metric_records_repository
         )
+
+    def get(self, **kwargs):
+        metric_records_dict = {}
+        try:
+            metric_records: List[
+                Dict[str, Union[int, str]]
+            ] = self.__retrieve_metric_records_service.execute()
+            metric_records_dict = {"data": metric_records}
+        except Exception as exc:
+            traceback.print_exc()
+
+        return make_response(jsonify(metric_records_dict))
 
     def post(self, **kwargs):
         try:
