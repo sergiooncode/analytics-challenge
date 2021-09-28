@@ -88,9 +88,12 @@ make custom-integration-tests TEST_PATH=tests/metrics/catalogue/infrastructure/t
 the challenge.
 2. The above gave place to 3 sub-applications or components part of the `metrics` business domain which are `catalogue`, `records`,
 and `aggregation`.
-3. Each of those components has 3 layers: domain, application and infrastructure which communicate such that:
+3. Each of those components has 3 layers: domain, application and infrastructure which communicate only with the
+immediate layer such that:
 domain <> application <> infrastructure
-4. The domain layer contains the business logic in its minimal expression. The application
+4. The domain layer contains the business logic in its minimal expression. The application layer basically provides the
+orchestration and interaction with the domain. The infrastructure basically handles access to network, database, etc and
+only interacts with application layer.
 
 
 ## Considerations
@@ -119,4 +122,5 @@ zappa.
 1. Validate more thoroughly the request body in the requests received by the different endpoints
 2. Add more tests for corner cases
 3. Add pagination to retrieve action in metric records endpoint
+4. Add foreign key from metric table to itself for proper aggregation calculation.
 
