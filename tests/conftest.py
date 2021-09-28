@@ -2,6 +2,7 @@ import os
 
 import pytest
 from alembic.command import upgrade as alembic_upgrade
+from alembic.command import downgrade as alembic_downgrade
 from alembic.config import Config as AlembicConfig
 from sqlalchemy.orm import sessionmaker
 
@@ -41,13 +42,12 @@ def database(test_app):
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     alembic_ini = os.path.join(root_dir, "testing.ini")
     alembic_config = AlembicConfig(alembic_ini)
-    # alembic_config.set_main_option('sqlalchemy.url', config['TEST_DB_URL'])
 
     alembic_upgrade(alembic_config, "head")
 
     yield _db
 
-    alembic_upgrade(alembic_config, "base")
+    alembic_downgrade(alembic_config, "base")
 
 
 @pytest.fixture(scope="function")
