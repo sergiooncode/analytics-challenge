@@ -1,3 +1,4 @@
+import json
 import traceback
 from typing import List, Dict, Union
 
@@ -10,6 +11,9 @@ from src.metrics.records.application.record_metric_record_use_case import (
 )
 from src.metrics.records.application.retrieve_metric_records_use_case import (
     RetrieveMetricRecordsUseCase,
+)
+from src.metrics.records.domain.exception.metric_to_record_doesn_exist import (
+    MetricToRecordDoesntExist,
 )
 from src.metrics.records.domain.metric_record_repository import MetricRecordRepository
 from src.metrics.records.domain.model.metric_record import MetricRecord
@@ -49,6 +53,12 @@ class MetricRecordsController(MethodView):
                 metric_name=request_body["metric_name"], value=request_body["value"]
             )
             self.__record_metric_record_service.execute(metric_record=metric_record)
+        except MetricToRecordDoesntExist as exc:
+            return Response(
+                response=json.dumps({"message": str(exc)}),
+                status=422,
+                content_type="application/json",
+            )
         except Exception as exc:
             traceback.print_exc()
 

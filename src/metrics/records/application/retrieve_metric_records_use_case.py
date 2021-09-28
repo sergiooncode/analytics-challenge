@@ -14,7 +14,7 @@ class RetrieveMetricRecordsUseCase:
         metric_records = []
         for metric_record_object in self.__metric_records_repository.list():
             metric_record_dict = {
-                "name": metric_record_object.metric.name,
+                "metric_name": metric_record_object.metric.name,
                 "value": metric_record_object.value,
                 "timestamp": metric_record_object.created_at,
             }

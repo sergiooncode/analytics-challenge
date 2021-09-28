@@ -1,8 +1,9 @@
 from src.metrics.catalogue.application.interaction.register_metric_command_transformer import (
     RecordMetricCommandTransformer,
 )
-from src.metrics.catalogue.domain.exception.metric_with_company_level_and_parent_not_allowed import \
-    MetricWithCompanyLevelAndParentNotAllowed
+from src.metrics.catalogue.domain.exception.metric_with_company_level_and_parent_not_allowed import (
+    MetricWithCompanyLevelAndParentNotAllowed,
+)
 from src.metrics.catalogue.domain.model.metric import Metric, MetricLevelEnum
 
 
@@ -35,8 +36,6 @@ def test_when_a_complete_body_is_received_but_is_company_level_and_has_parent_me
     }
 
     try:
-        RecordMetricCommandTransformer(
-            request_json=request_body
-        ).transform_request()
+        RecordMetricCommandTransformer(request_json=request_body).transform_request()
     except Exception as exc:
         assert isinstance(exc, MetricWithCompanyLevelAndParentNotAllowed)
