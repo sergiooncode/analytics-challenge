@@ -97,3 +97,19 @@ def test_when_are_recorded_and_metric_exists(client, session):
     assert 1 == len(metric_records_recorded)
     assert metric_name == metric_records_recorded[0].metric.name
     assert 10 == metric_records_recorded[0].value
+
+
+def test_when_are_recorded_and_metric_doesnt_exist(client, session):
+    metric_name = "metric_one"
+
+    resp = client.post(
+        "/metrics/records",
+        data=json.dumps(dict(metric_name=metric_name, value=10)),
+        content_type="application/json",
+    )
+
+    metric_records_recorded = session.query(MetricRecord).all()
+
+    assert 422 == resp.status_code
+    assert b"" == resp.data
+    assert 0 == len(metric_records_recorded)
