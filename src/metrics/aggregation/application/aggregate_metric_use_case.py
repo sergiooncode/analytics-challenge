@@ -21,6 +21,6 @@ class AggregateMetricUseCase:
             max_date=max_date,
         )
 
-        if aggregation[0][0] is not None:
-            return {"metric_name": metric_name, "aggregation": float(aggregation[0][0])}
+        if aggregation != 0.0:
+            return {"metric_name": metric_name, "aggregation": aggregation}
         return None

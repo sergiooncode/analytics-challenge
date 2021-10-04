@@ -13,6 +13,7 @@ class RetrieveMetricsUseCase:
             metric_objects = self.__metric_repository.list(name=metric_name)
         else:
             metric_objects = self.__metric_repository.list()
+        print(metric_objects)
 
         for metric_object in metric_objects:
             metric_dict = {
@@ -20,7 +21,7 @@ class RetrieveMetricsUseCase:
                 "level": metric_object.level,
             }
             if metric_object.parent_metric_id:
-                metric_dict["parent_metric_id"] = metric_object.parent_metric_id
+                metric_dict["parent_metric_name"] = metric_object.parent_metric.name
             metrics.append(metric_dict)
 
         return metrics
