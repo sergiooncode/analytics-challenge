@@ -1,11 +1,11 @@
 from sqlalchemy import Column, Integer, DateTime, ForeignKey
-from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 
-from src.metrics.core.persistence.utils import Base
+from src.metrics.core.persistence.models import db
 
 
-class MetricRecord(Base):
+class MetricRecord(db.Model):
     __tablename__ = "metric_record"
 
     id = Column(Integer, primary_key=True)

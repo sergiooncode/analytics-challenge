@@ -3,10 +3,10 @@ from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.orm.collections import attribute_mapped_collection
 
-from src.metrics.core.persistence.utils import Base
+from src.metrics.core.persistence.models import db
 
 
-class Metric(Base):
+class Metric(db.Model):
     __tablename__ = "metric"
 
     id = Column(Integer, primary_key=True)

@@ -13,7 +13,6 @@ class RetrieveMetricsUseCase:
             metric_objects = self.__metric_repository.list(name=metric_name)
         else:
             metric_objects = self.__metric_repository.list()
-        print(metric_objects)
 
         for metric_object in metric_objects:
             metric_dict = {

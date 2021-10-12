@@ -6,7 +6,6 @@ from sqlalchemy import pool
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
-from src.metrics.core.persistence.models import session
 from src.metrics.core.persistence.utils import Base
 
 config = context.config

@@ -9,6 +9,10 @@ def create_app(config_name="default"):
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
+    with app.app_context():
+        from src.metrics.core.persistence.models import db
+        db.init_app(app)
+
     # API blueprints
     app.register_blueprint(metrics_api)
 

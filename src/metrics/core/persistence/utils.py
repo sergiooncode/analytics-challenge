@@ -1,9 +1,8 @@
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()
-Session = None
 
 
 def create_db_engine(db_conn_string, pool_size=2, max_overflow=0, debug_mode=False):
@@ -18,12 +17,8 @@ def create_db_engine(db_conn_string, pool_size=2, max_overflow=0, debug_mode=Fal
     )
 
 
-def create_db_session(engine):
-    global Session
-    if not Session:
-        Session = sessionmaker(bind=engine)
-        # todo: setup connection pooling properties
-    return Session()
+def create_db_session():
+    return SQLAlchemy(model_class=declarative_base())
 
 
 def create_db_schema(engine):
