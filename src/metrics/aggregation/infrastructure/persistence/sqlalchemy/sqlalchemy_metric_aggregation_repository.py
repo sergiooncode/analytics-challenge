@@ -24,7 +24,11 @@ class SqlalchemyMetricAggregationRepository(MetricAggregationRepository):
             MetricRecord.query.join(Metric)
             .filter(
                 Metric.parent_metric_id.in_(
-                    (Metric.query.filter_by(name=metric_name).first().id,)
+                    (
+                        o.id
+                        for o in Metric.query.filter_by(name=metric_name).all()
+                        if o is not None
+                    )
                 ),
                 MetricRecord.created_at >= min_date,
                 MetricRecord.created_at <= max_date,
@@ -32,10 +36,14 @@ class SqlalchemyMetricAggregationRepository(MetricAggregationRepository):
             .all()
         )
 
-        given_metric_children_tree_values = [o.value for o in given_metric_children_tree]
+        given_metric_children_tree_values = [
+            o.value for o in given_metric_children_tree
+        ]
         given_metric_metric_tree_values = [o.value for o in given_metric_metric_tree]
-        given_metric_children_tree_values.extend(
-            given_metric_metric_tree_values
-        )
+        given_metric_children_tree_values.extend(given_metric_metric_tree_values)
 
-        return statistics.mean(given_metric_children_tree_values)
+        return (
+            statistics.mean(given_metric_children_tree_values)
+            if given_metric_children_tree_values
+            else 0
+        )
