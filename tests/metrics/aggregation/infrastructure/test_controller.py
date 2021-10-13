@@ -59,43 +59,6 @@ def test_when_records_are_aggregated_and_there_are_records_of_agent_metrics(
     )
 
 
-def test_when_records_are_aggregated_and_there_are_records_of_agent_metrics(
-    client, session
-):
-    metric_name = "a_metric"
-    session.add_all([Metric(name=metric_name, level=MetricLevelEnum.agent.value)])
-    session.commit()
-    metric_id = session.query(Metric).filter_by(name=metric_name).all()[0].id
-
-    value = 10
-    session.add_all(
-        [
-            MetricRecord(
-                value=value,
-                metric_id=metric_id,
-                created_at=datetime.strptime("2021-09-25", "%Y-%m-%d"),
-            )
-        ]
-    )
-    session.commit()
-
-    resp = client.post(
-        "/metrics/aggregation",
-        data=json.dumps(
-            dict(
-                metric_name=metric_name,
-                min_date="2021-09-24",
-                max_date="2021-09-26",
-            )
-        ),
-        content_type="application/json",
-    )
-
-    assert {"data": {"aggregation": 10.0, "metric_name": "a_metric"}} == json.loads(
-        resp.data
-    )
-
-
 def test_when_records_are_aggregated_and_there_are_records_of_company_metrics(
     client, session
 ):
